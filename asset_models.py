@@ -33,3 +33,11 @@ class Asset:
       self.total_return = 0.0
       self.volatility = 0.0
       self.sharpe_ratio = 0.0
+
+  def __str__(self):
+    # returns the ticker and its metrics as a string
+    return f"{self.ticker}: Return = {self.total_return:.2f}%, Volatility = {self.volatility:.2f}%, Sharpe Ratio = {self.sharpe_ratio:.2f}"
+
+  def __lt__(self, other):
+    # compares assets and ranks them based on the Sharpe Ratio
+    return self.sharpe_ratio < other.sharpe_ratio
