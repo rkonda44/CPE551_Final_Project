@@ -59,3 +59,46 @@ class Screener:
         """
 
         self.assets.sort(reverse = True)
+    
+    def export_to_csv(self, filename = "results.csv"):
+        """
+        Exports results to CSV file
+        """
+        
+        #Converts asset objects to dictionaries for pandas dataframe
+        data = [{
+            "Ticker": a.ticker,
+            "Return": a.total_return,
+            "Volatility": a.volatility,
+            "Sharpe Ratio": a.sharpe_ratio
+        } for a in self.assets]
+
+        #Builds dataframe from collected data
+        df = pd.DataFrame(data)
+
+        #Saves data to csv file
+        df.to_csv(filename, index = False)
+    
+    def plot_risk_vs_return(self):
+        """
+        Uses matplotlib library to create scatter plot of risk vs return
+        """
+
+        #Collects returns and volatility values from assets
+        returns = [a.total_return for a in self.assets]
+        volatilities = [a.volatility for a in self.assets]
+
+        plt.figure()
+        plt.scatter(volatilities, returns)
+
+        #labels each point with ticker symbol
+        for a in self.assets:
+            plt.annotate(a.ticker, (a.volatility, a.total_return))
+
+        #Formatting the plot!
+        plt.xlabel("Volatility")
+        plt.ylabel("Return")
+        plt.title("Risk vs Return")
+        plt.grid()
+
+        plt.show()
