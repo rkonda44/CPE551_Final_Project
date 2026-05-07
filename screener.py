@@ -14,9 +14,11 @@ class Screener:
         self.tickers = tickers
         self.start_date = start_date
         self.end_date = end_date
+
         self.assets = [] #will hold Asset objects
 
     def fetch_data(self):
+
         """
         Obtains historical price data using yfinance library
         """
@@ -37,15 +39,18 @@ class Screener:
                 self.assets.append(asset)
             
             except Exception as e:
+                #Catches errors and/or bad tickers
                 print(e)
 
     def filter_assets(self, max_volatility):
+
         """
         Filters assets based on volatility and return, 
         keeping only assets that meet risk/return criteria
         """
 
         if max_volatility < 0: 
+            #Checks for errors in volatility value
             raise ValueError("Volatility must not be negative")
         
         self.assets = list(filter(
@@ -59,6 +64,14 @@ class Screener:
         """
 
         self.assets.sort(reverse = True)
+
+    def asset_generator(self):
+
+        """
+        Yields assets one at a time instead of returning the entire list
+        """    
+        for asset in self.assets:
+            yield asset
     
     def export_to_csv(self, filename = "results.csv"):
         """
@@ -102,3 +115,4 @@ class Screener:
         plt.grid()
 
         plt.show()
+    
